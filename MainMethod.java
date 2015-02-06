@@ -4,40 +4,34 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Set;
 import java.lang.Math;
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.lang.Exception;
 
-public class MainMethodV2 {
+public class MainMethod {
 
-	private static final String ANSI_RESET = "\u001B[0m";
-	private static final String ANSI_BLACK = "\u001B[30m";
-	private static final String ANSI_RED = "\u001B[31m";
-	private static final String ANSI_GREEN = "\u001B[32m";
-	private static final String ANSI_YELLOW = "\u001B[33m";
-	private static final String ANSI_BLUE = "\u001B[34m";
-	private static final String ANSI_PURPLE = "\u001B[35m";
-	private static final String ANSI_CYAN = "\u001B[36m";
-	private static final String ANSI_WHITE = "\u001B[37m";
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_BLACK = "\u001B[30m";
+	public static final String ANSI_RED = "\u001B[31m";
+	public static final String ANSI_GREEN = "\u001B[32m";
+	public static final String ANSI_YELLOW = "\u001B[33m";
+	public static final String ANSI_BLUE = "\u001B[34m";
+	public static final String ANSI_PURPLE = "\u001B[35m";
+	public static final String ANSI_CYAN = "\u001B[36m";
+	public static final String ANSI_WHITE = "\u001B[37m";
 
 
 	private static final String COLUMN_TAB_DELIMITER = "\t\t";
 	private static final int COLUMN_TAB_DELIMITER_SIZE = 8;
 	private static final String TABLE_BORDER = "-";
-	private static final String DATA_ROW_DELIMITER = ";;";
-	private static final int ID_COLUMN = 0;
 
-	private static void prettyPrintData(Map<String, Map> data) {
+	public static void prettyPrintData(List<Map> data) {
 		System.out.println();
-		for (Map d : data.values()) {
+		for (Map d : data) {
 			for (Object key : d.keySet()) {
 				System.out.println(key + ": " + d.get(key));
 			}
 		}
 	}
 
-	private static void prettyPrintDataDBStyle(Map<String, Map> data, String tableName) {
+	public static void prettyPrintDataDBStyle(List<Map> data, String tableName) {
 		System.out.println();
 		// Assuming all data is clean (same columns)
 
@@ -50,7 +44,7 @@ public class MainMethodV2 {
 		
 		// Print Columns
 		int tableBorderSize = 0;
-		Set columns = ((Map)(data.values().toArray()[0])).keySet();
+		Set columns = data.get(0).keySet();
 		String columnsString = "";
 		Object[] columnsArray = columns.toArray();
 		for (int index = 0; index < columnsArray.length; index++) {
@@ -84,7 +78,7 @@ public class MainMethodV2 {
 		System.out.println();
 
 
-		for (Map row : data.values()) {
+		for (Map row : data) {
 			for (Object key : row.keySet()) {
 				System.out.print(row.get(key) + COLUMN_TAB_DELIMITER);
 			}
@@ -97,13 +91,13 @@ public class MainMethodV2 {
 		System.out.println();	
 	}
 
-	private static void printTableBorder(String border, int size) {
+	public static void printTableBorder(String border, int size) {
 		for (int index = 0; index < size; index++) {
 			System.out.print(border);
 		}
 	}
 
-	private static void prettyPrintDataDBStyle(Map<String, Map> data) {
+	public static void prettyPrintDataDBStyle(List<Map> data) {
 		prettyPrintDataDBStyle(data, null);
 	}
 
@@ -115,34 +109,34 @@ public class MainMethodV2 {
 		return customer;
 	}
 
-	private static Map<String, Map> loadCustomers() {
-		Map customers = new HashMap<Object, Map>();
+	public static List<Map> loadCustomers() {
+		List<Map> customers = new ArrayList<Map>();
 		
-		customers.put("cust123", newCustomer("cust123", "Joe"));
-		customers.put("cust456", newCustomer("cust456", "Adam"));
-		customers.put("cust789", newCustomer("cust789", "Bill"));
-		customers.put("cust001", newCustomer("cust001", "Allison"));
-		customers.put("cust002", newCustomer("cust002", "Betty"));
+		customers.add(newCustomer("cust123", "Joe"));
+		customers.add(newCustomer("cust456", "Adam"));
+		customers.add(newCustomer("cust789", "Bill"));
+		customers.add(newCustomer("cust001", "Allison"));
+		customers.add(newCustomer("cust002", "Betty"));
 
 		return customers;
 	}
 
 	private static Map newProduct(String id, String name) {
-		Map product = new HashMap<Object, Map>();
+		Map product = new HashMap();
 		product.put("Id", id != null ? id : "null");
 		product.put("Name", name != null ? name : "null");
 
 		return product;
 	}
 
-	private static Map<String, Map> loadProducts() {
-		Map products = new HashMap<Object, Map>();
+	public static List<Map> loadProducts() {
+		List<Map> products = new ArrayList<Map>();
 		
-		products.put("prod123", newProduct("prod123", "Hammer"));
-		products.put("prod456", newProduct("prod456", "Laptop"));
-		products.put("prod789", newProduct("prod789", "Shoe"));
-		products.put("prod001", newProduct("prod001", "Keyboard"));
-		products.put("prod002", newProduct("prod002", "Mouse"));
+		products.add(newProduct("prod123", "Hammer"));
+		products.add(newProduct("prod456", "Laptop"));
+		products.add(newProduct("prod789", "Shoe"));
+		products.add(newProduct("prod001", "Keyboard"));
+		products.add(newProduct("prod002", "Mouse"));
 
 		return products;
 	}
@@ -156,80 +150,21 @@ public class MainMethodV2 {
 		return purchase;
 	}
 
-	private static Map<String, Map> loadPurchases() {
-		Map purchases = new HashMap();
+	public static List<Map> loadPurchases() {
+		List<Map> purchases = new ArrayList<Map>();
 
-		purchases.put("p001", newPurchase("p001", "cust123", "prod123"));
-		purchases.put("p002", newPurchase("p002", "cust456", "prod123"));
-		purchases.put("p003", newPurchase("p003", "cust123", "prod456"));
-		purchases.put("p004", newPurchase("p004", "cust789", "prod789"));
-		purchases.put("p005", newPurchase("p005", "cust001", "prod123"));
-		purchases.put("p006", newPurchase("p006", "cust001", "prod002"));
-		purchases.put("p007", newPurchase("p007", "cust001", "prod002"));
-		purchases.put("p008", newPurchase("p008", "cust001", "prod002"));
-		purchases.put("p009", newPurchase("p009", "cust001", "prod002"));
-		purchases.put("p010", newPurchase("p010", "cust001", "prod002"));
+		purchases.add(newPurchase("p001", "cust123", "prod123"));
+		purchases.add(newPurchase("p002", "cust456", "prod123"));
+		purchases.add(newPurchase("p003", "cust123", "prod456"));
+		purchases.add(newPurchase("p004", "cust789", "prod789"));
+		purchases.add(newPurchase("p005", "cust001", "prod123"));
+		purchases.add(newPurchase("p006", "cust001", "prod002"));
+		purchases.add(newPurchase("p007", "cust001", "prod002"));
+		purchases.add(newPurchase("p008", "cust001", "prod002"));
+		purchases.add(newPurchase("p009", "cust001", "prod002"));
+		purchases.add(newPurchase("p010", "cust001", "prod002"));
 
 		return purchases;		
-	}
-
-	private static void log(Object message) {
-		System.out.println(ANSI_PURPLE + message + ANSI_RESET);
-	}
-
-	private static Map<String, Map> loadDataFromFile(String filename) {
-		Map<String, Map> returnData = null;
-
-		File fileInfo = new File(filename);
-
-		if (fileInfo != null) {
-			if (fileInfo != null && fileInfo.exists()) {
-				try {
-					BufferedReader fileReader = new BufferedReader(new FileReader(filename));
-
-					if (fileReader != null) {
-						List<String> columns = new ArrayList<String>();
-						String columnsLine = fileReader.readLine();
-						if (columnsLine != null) {
-							for (String column : columnsLine.split(DATA_ROW_DELIMITER)) {
-								columns.add(column);
-							}
-
-							if (columns.size() > 0) {
-								returnData = new HashMap<String, Map>();
-
-								
-								// Starting from the second line (first line is column headers),
-								// load all the data into memory
-								String row = null;
-								while ((row = fileReader.readLine()) != null) {
-
-									// Split the row data by ";;"
-									String[] rowValues = row.split(DATA_ROW_DELIMITER);
-
-									if (rowValues != null && rowValues.length > 0) {
-										Map obj = new HashMap();
-										for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
-											obj.put(columns.get(columnIndex), rowValues[columnIndex]);
-										}
-										returnData.put(
-											(String)obj.get(columns.get(ID_COLUMN)),  // Id
-											obj);                                     // Object Map
-									}
-								}
-
-								return returnData;
-							}
-						}
-					}
-				} catch(Exception e) {
-					System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
-					return returnData;
-				}
-			}
-		}
-
-		return returnData;
 	}
 
 	public static void main(String[] args) {
@@ -252,87 +187,74 @@ public class MainMethodV2 {
 			// Assumptive map storage
 
 			// customers
-			// {
-			// 	"cust123":
+			// [
 			// 	{ 
 			// 		"Id": "cust123",
 			// 		"Name": "Joe"
 			// 	},
-			// 	"cust456":
 			// 	{ 
 			// 		"Id": "cust456",
 			// 		"Name": "Adam"
 			// 	},
-			// 	"cust789":
 			// 	{ 
 			// 		"Id": "cust789",
 			// 		"Name": "Bill"
 			// 	}
-			// }
+			// ]
 
 			// products
-			// {
-			// 	"prod123":
+			// [
 			// 	{
 			//		"Id": "prod123",
 			// 		"Name": "Hammer"
 			// 	},
-			// 	"prod456":
 			// 	{
 			//		"Id": "prod456",
 			// 		"Name": "Laptop"
 			// 	},
-			// 	"prod789":
 			// 	{
 			//		"Id": "prod789",
 			// 		"Name": "Shoe"
 			// 	},
-			// }
+			// ]
 
 			// purchases
-			// {
-			// 	"purch001":
+			// [
 			// 	{
 			// 		"Id": "purch001",
 			//		"cId": "cust123",
 			//		"pId": "prod123"
 			// 	},
-			// 	"purch002":
 			// 	{
 			// 		"Id": "purch002",
 			//		"cId": "cust123",
 			//		"pId": "prod456"
 			// 	},
-			// 	"purch003":
 			// 	{
 			// 		"Id": "purch003",
 			//		"cId": "cust456",
 			//		"pId": "prod123"
 			// 	}
-			// }
+			// ]
 
-			Map<String, Map> customers = loadDataFromFile("customers.data"); //loadCustomers();
-			System.out.println(ANSI_GREEN + "DEBUG: " + customers);
+			List<Map> customers = loadCustomers();
 			prettyPrintDataDBStyle(customers, "Customers");
 
-			Map<String, Map> products = loadProducts();
+			List<Map> products = loadProducts();
 			prettyPrintDataDBStyle(products, "Products");
 
-			Map<String, Map> purchases = loadPurchases();
+			List<Map> purchases = loadPurchases();
 			prettyPrintDataDBStyle(purchases, "Purchases");
 
 			// Assume data is loaded
 
 
 			// Grab Customer Ids who bought product P
-			Map<String, Map> CustomersIdsWhoBoughtProductP = new HashMap<String, Map>();
-			for (Map purchase : purchases.values()) {
+			List<String> CustomersIdsWhoBoughtProductP = new ArrayList<String>();
+			for (Map purchase : purchases) {
 				// Grab only where product p
 				if (purchase.get("pId").equals(p)) {
-					String pBuyingCustomerId = (String)purchase.get("cId");
-					Map pBuyingCustomer = customers.get(purchase.get("cId"));
-					//System.out.println(String.format("DEBUG: Adding P-buying customer: (%s) %s", pBuyingCustomerId, pBuyingCustomer));
-					CustomersIdsWhoBoughtProductP.put(pBuyingCustomerId, pBuyingCustomer);
+					CustomersIdsWhoBoughtProductP.add((String)purchase.get("cId"));
 				}
 			}
 
@@ -340,9 +262,8 @@ public class MainMethodV2 {
 			System.out.println();
 			System.out.println();
 			System.out.println(ANSI_YELLOW + "Customers who bought product P:" + ANSI_RESET);
-			for (Map customer : CustomersIdsWhoBoughtProductP.values()) {
-				//System.out.println("DEBUG: " + customer);
-				if (customer.containsKey("Id") && customer.containsKey("Name")) {
+			for (Map customer : customers) {
+				if (CustomersIdsWhoBoughtProductP.contains((String)customer.get("Id"))) {
 					System.out.println(
 						String.format("%s (%s)", 
 							customer.get("Name"), 
@@ -352,36 +273,37 @@ public class MainMethodV2 {
 
 
 			// Grab all products purchased by Customers who bought product P
-			Map<String, Integer> productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount = new HashMap<String, Integer>();
-			for (Map purchase : purchases.values()) {
-
+			Map productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount = new HashMap();
+			for (Map purchase : purchases) {
 				// Grab only where customers who bought product p... grab the products
-				if (CustomersIdsWhoBoughtProductP.containsKey(purchase.get("cId"))) {
+				if (CustomersIdsWhoBoughtProductP.contains(purchase.get("cId"))) {
 					if (!productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount.containsKey(purchase.get("pId"))) {
 						// If doesn't have product added yet, add product to map with count = 1
-						productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount.put((String)purchase.get("pId"), 1);
+						productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount.put(purchase.get("pId"), 1);
 					} else {
 						// Else if product is added to map, then increment the count
 						productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount
 							.put(
-								(String)purchase.get("pId"), 
+								purchase.get("pId"), 
 								(int)productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount
 									.get(purchase.get("pId")) + 1);
 					}
 				}
 			}
 
-			// DEBUG: System.out.println(ANSI_RED + "productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount: " + productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount + ANSI_RESET);
+			System.out.println(ANSI_RED + "productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount: " + productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount + ANSI_RESET);
 
 
 			System.out.println();
 			System.out.println();
 			System.out.println(ANSI_YELLOW + "Products bought by Customers who bought Product: " + p + ANSI_RESET);
-			for (Object productId : productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount.keySet()) {
-				System.out.println(
-					String.format("%s (%s)", 
-						((Map)products.get(productId)).get("Name"), 
-						((Map)products.get(productId)).get("Id")));
+			for (Map product : products) {
+				if (productsOfPurchasesInvolvingCustomersWhoBoughtProductPAndCount.containsKey(product.get("Id"))) {
+					System.out.println(
+						String.format("%s (%s)", 
+							product.get("Name"), 
+							product.get("Id")));
+				}
 			}
 
 
@@ -416,7 +338,7 @@ public class MainMethodV2 {
 			System.out.println();
 			System.out.println(String.format(ANSI_YELLOW + "Based on our data of other Customers who purchased product %s, %nwe recommend these products (in order of popularity):" + ANSI_RESET, p));
 			for (int index = 0; index < orderedRecommendations.size(); index++) {
-				for (Map product : products.values()) {
+				for (Map product : products) {
 					if (orderedRecommendations.get(index).equals(product.get("Id"))) {
 						System.out.println(String.format("%s (%s)", product.get("Name"), product.get("Id")));
 					}
